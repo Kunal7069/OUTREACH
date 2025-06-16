@@ -1,0 +1,20 @@
+import dropbox
+from uuid import uuid4
+from fastapi import UploadFile
+
+ACCESS_TOKEN = "sl.u.AFymxOsWdBv9r3UYIhPl9pl03hJw3yltkDLQ4yjgUdSoYUcMAMxEkVMkSIEfNREsOdxf1qh9GgDiWT8UPO8mbx65PG_MxgXtpGjoA0zGnLnTnA5onaVzYg80s85UO2bi3ANQ6oW8LqCvPpmDwfp7i_snXvhqVWSez_U7X2EJXkCPYfbH_kTx-7w4YxzLtkfXRuSGBoWTEFhqMsQ-coqXOd2Y0N768miKgfsejvUXBExmdGxxgQYPeL9NC4amx3rBJzulEduf7Hcjwsjopg_rjQCZdRFzccLqTVoOZJNXnNW7t0X9dK7FUMuPU9t50zHYOwlfoohriT7cP459pkOv7BQvXBD16Ni1oCrfw2mDyzAIPzghlaOY_97aTDWbZTXkUVtgR0B3l0G2TSmry10fJLRIpsmNnEg4lMKmHK9r0QnmZSaufYyuLZPjMgHTh1pEiusOypWP-_Pk6y2gVL-o_j-emK-jjadmIB4cfdN26BpbNF35yGGmG7gXCCV0_iUHriTtgmd_rlyL7TeEFcfjetBcfVZVsiBo07FhXk0z0YBo9jjofD6gHRNqGkeyoq-0Rf6apb38biukFGao0O-3FQrlqjbDJtnG6Vj9bpx3iCmFKSNCNMwu5OHrNIH3NXaGKIsPKGltAS60RZ0wAnTA0VkjCBnWnXrkt7MRkcpXklQZiA90eLyI5NW2puXb6iCxVgcweQYPFqG94ZLKHs1HNP5Eche4dzx7gRrFB08Fx6uV56a0hH4j7Sbr2HMwADPsW5pfd9UjjYKr2BjwvGkCmpgHEEd2O6aXxD9i2b2bAq6f6Ts-Zh9FS_6qzmppmuCyZHSPDbBpbK5lRekGIvGO1hy7k6V0jHExr_If73GBu5bVGseZDsL8opl-44vxqVZ2NHoTQpoNhyBgycHfWTkRlrat8L1yxySWVc9WEMXxKNi_tLsb4lRJKYkBumTKIWNaGVOTZQvIagkyE2NC9blJ14nNnxLCgfKesMVtb-XpIsAHvaVm9_hB1ajayGldJY8yUhVT6RpIU0ONDUHthTIgWa0CDfjxjgbQTzw3VA8vaWTwgVgM0hlMNdEqEEjQlGhVunSg56WdCun2X5vE59MneMAKxYlmE4a5bLLZA1tqsET4vwdCWQb-h9E9kopx4-x7nyIp7ssW6XjoUoIZ2dcp3vJ-odAmsVYZtblMAvLkAYfHdL0YaN62_HTu80Jv_KzAN9VsRiILZvUsQZohYXG9U_ZKKIsgJGps_YYMcVOfParX9dhjGltZdPwzTxXH_agq6AaZ5bZVcwLE_Qj7yO_wd7ip8kfOAzLW5y0FBVzFhqe5YrUejmIYs0H15X5Kg4mI35rGziwv9qpeE84BXcG501VXFQOKnIhmn57Djm5hPhi3g5yRzOlqQFrVAiw_ZUEhBJ0A01cZsAVuKlcLKIEbmjuMyRIDDPtzv7SjrVRQsSp8cHsrVAnRveT1Vxc1D_42XNA"
+
+def upload_to_dropbox(userid:str,file: UploadFile, tag: str = "untagged") -> str:
+    dbx = dropbox.Dropbox(ACCESS_TOKEN)
+
+    filename = f"{userid}_{tag}.pdf"
+    dropbox_path = f"/{filename}"
+
+    # Read file contents and upload
+    file_bytes = file.file.read()
+    dbx.files_upload(file_bytes, dropbox_path, mode=dropbox.files.WriteMode("overwrite"))
+
+    # Create shared link
+    shared_link_metadata = dbx.sharing_create_shared_link_with_settings(dropbox_path)
+    url = shared_link_metadata.url.replace("?dl=0", "?dl=1")
+    return url
