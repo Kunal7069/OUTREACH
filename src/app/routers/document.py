@@ -17,11 +17,13 @@ def create_document(
     name: str = Form(...),
     linkedin_username: str = Form(...),
     tag: str = Form(None),
+    title: str = Form(None),
+    description: str = Form(None),
     file: UploadFile = Form(...),
     db: Session = Depends(get_db)
 ):
     manager = DocumentManager(db)
-    document = manager.save_document_from_upload(name, linkedin_username, file, tag)
+    document = manager.save_document_from_upload(name, linkedin_username, file, tag,title,description)
     if not document:
         raise HTTPException(status_code=400, detail="Document could not be created. Check if the user exists.")
     return document

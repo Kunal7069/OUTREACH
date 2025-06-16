@@ -11,6 +11,8 @@ class Document(Base):
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     document_url = Column(String, nullable=False)
     tag = Column(String, nullable=True)
+    title = Column(String, nullable=True)
+    description = Column(String, nullable=True)
 
     # Relationship to access user from a document
     user = relationship("User", back_populates="documents")

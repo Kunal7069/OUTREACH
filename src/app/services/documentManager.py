@@ -44,7 +44,7 @@ class DocumentManager:
             return None
         
         
-    def save_document_from_upload(self, name: str, linkedin_username: str, file: UploadFile, tag: Optional[str] = None) -> Optional[Document]:
+    def save_document_from_upload(self, name: str, linkedin_username: str, file: UploadFile, tag: Optional[str] = None, title: Optional[str] = None, description: Optional[str] = None) -> Optional[Document]:
         try:
             user = (
                 self.db.query(User)
@@ -62,7 +62,9 @@ class DocumentManager:
             document = Document(
                 user_id=user.id,
                 document_url=document_url,
-                tag=tag
+                tag=tag,
+                title = title,
+                description=description
             )
 
             self.db.add(document)
@@ -90,7 +92,7 @@ class DocumentManager:
             if not user:
                 print(f"[NotFound] No user found for name='{name}', linkedin_username='{linkedin_username}'")
                 return []
-
+            print(user.documents)
             return user.documents
 
         except SQLAlchemyError as e:

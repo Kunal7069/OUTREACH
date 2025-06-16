@@ -13,6 +13,8 @@ class DocumentResponse(BaseModel):
     user_id: UUID
     document_url: str
     tag: Optional[str]
+    title: Optional[str]
+    description: Optional[str]
 
     class Config:
         orm_mode = True
