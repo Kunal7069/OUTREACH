@@ -1,5 +1,6 @@
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from .config.database.database import Base, engine
 from src.app.routers import user,document
 
@@ -10,6 +11,14 @@ app = FastAPI(
     title="User Service API",
     version="1.0.0",
     description="API to manage users"
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Replace with specific origins in production
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # Register routes
