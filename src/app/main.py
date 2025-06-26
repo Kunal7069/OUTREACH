@@ -62,4 +62,21 @@ def login_and_get_cookies():
             "status": "error",
             "message": str(e)
         }
-        
+
+@app.get("/")
+def home():
+    try:
+        if 200 == 200:
+            return  {
+                    "Message": "Server is up"
+                }
+        else:
+            return {
+                "Message": "Server is up"
+            }
+
+    except Exception as e:
+        return {
+            "status": "error",
+            "message": str(e)
+        }
